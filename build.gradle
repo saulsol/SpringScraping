@@ -25,7 +25,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    // jsoup
     implementation 'org.jsoup:jsoup:1.12.1'
+    // 크롤링을 위한 Selinium 의존성
+    implementation 'org.seleniumhq.selenium:selenium-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

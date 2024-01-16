@@ -9,10 +9,16 @@ import org.springframework.stereotype.Component;
 public class ScrapScheduler {
 
     private final WebScraper webScraper;
+    private final SeleniumScraper seleniumScraper;
 
-    @Scheduled(cron = "0 08 16 ? * THU")
+    @Scheduled(cron = "0 24 15 ? * MON")
     public void runningScraperJson(){
         webScraper.process();
+    }
+
+    @Scheduled(cron = "0 51 16 ? * TUE")
+    public void runningScraperSelenium(){
+        seleniumScraper.scrapCardData();
     }
 
 }
