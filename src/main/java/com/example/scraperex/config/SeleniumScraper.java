@@ -87,7 +87,12 @@ public class SeleniumScraper {
         }
 
         for(Card c : cardList){
-            System.out.println(c.toString());
+            String detailUrl = c.getCardDetailUrl();
+            driver.get(detailUrl); // 페이지 이동
+            WebElement boxContainer = driver.findElement(By.cssSelector("in_box")); // 여러장의 이미지들이 있는지 없는지 파악해야 함
+
+
+
         }
 
         System.out.println("cardList Size --> "+cardList.size());
