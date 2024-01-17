@@ -16,7 +16,7 @@ import java.util.*;
 @Component
 public class SeleniumScraper {
 
-    // 신용카드
+
     static {
         System.setProperty("webdriver.chrome.driver", "/chromedriver.exe");
     }
@@ -24,13 +24,13 @@ public class SeleniumScraper {
     public List<Card> scrapCardData(){
 
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.addArguments("--headless"); // 꼭 있어야 하는 옵션
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--disable-popup-blocking");//팝업 무시
         WebDriver driver = new ChromeDriver(options);
         driver.manage().window().maximize();
 
-        String baseUrl = "https://www.card-gorilla.com/search/card?cate=CRD";
+        String baseUrl = "https://www.card-gorilla.com/search/card?cate=CRD"; // 신용카드
         driver.get(baseUrl);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -62,8 +62,28 @@ public class SeleniumScraper {
             WebElement lMthElement = cardContainer.findElement(By.cssSelector("div.card_data p.l_mth"));
             String lastMonth = lMthElement.getText();
 
+            WebElement detailElement = cardContainer.findElement(By.cssSelector("div.card_data a.b_view"));
+            String detailUrl = detailElement.getAttribute("href");
+
+            WebElement saleElement = cardContainer.findElement(By.cssSelector("div.card_data div.sale"));
+
+            // "KB Pay" 키워드 가져오기
+            WebElement storeElement = saleElement.findElement(By.xpath(".//i[@class='store']"));
+            String storeKeyword = storeElement.getText();
+
+            // "할인" 텍스트 가져오기
+            WebElement discountTextElement = saleElement.findElement(By.xpath(".//span[@class='num']"));
+            String discountText = discountTextElement.getText();
+
+            // 할인 항목
+            WebElement discountPercentElement = saleElement.findElement(By.xpath(".//b"));
+            String discountPercent = discountPercentElement.getText();
+
+            String benefitKeyword = storeKeyword + " : " + discountText + " : " + discountPercent;
+
             String notification = "";
-            cardList.add(new Card(imageUrl,cardName,cardCorp,null,lastMonth,notification));
+            cardList.add(new Card(imageUrl,cardName,cardCorp,null,lastMonth, detailUrl, benefitKeyword, notification));
+
         }
 
         for(Card c : cardList){
